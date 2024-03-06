@@ -1,5 +1,6 @@
-use std::io;
 use rand::Rng;
+use std::cmp::Ordering;
+use std::io;
 
 fn main() {
     println!("Devinez le nombre !");
@@ -8,13 +9,28 @@ fn main() {
 
     println!("Le nombre secret est : {}", secret_number);
 
-    println!("Veuillez entrer un nombre.");
+    loop {
+        println!("Veuillez entrer un nombre.");
 
-    let mut supposition = String::new();
+        let mut supposition = String::new();
 
-    io::stdin()
-        .read_line(&mut supposition)
-        .expect("Échec de la lecture de l'entrée utilisateur");
+        io::stdin()
+            .read_line(&mut supposition)
+            .expect("Échec de la lecture de l'entrée utilisateur");
 
-    println!("Votre nombre : {}", supposition);
+        let supposition: u32 = supposition.trim()
+                                        .parse()
+                                        .expect("Veuillez entrer un nombre !");
+
+        println!("Votre nombre : {}", supposition);
+
+        match supposition.cmp(&secret_number) {
+            Ordering::Less => println!("C'est plus !"),
+            Ordering::Greater => println!("C'est moins !"),
+            Ordering::Equal => {
+                println!("Vous avez gagné !");
+                break;
+            },
+        }
+    }
 }
