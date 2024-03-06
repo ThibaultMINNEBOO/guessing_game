@@ -7,8 +7,6 @@ fn main() {
 
     let secret_number = rand::thread_rng().gen_range(1..101);
 
-    println!("Le nombre secret est : {}", secret_number);
-
     loop {
         println!("Veuillez entrer un nombre.");
 
@@ -18,9 +16,10 @@ fn main() {
             .read_line(&mut supposition)
             .expect("Échec de la lecture de l'entrée utilisateur");
 
-        let supposition: u32 = supposition.trim()
-                                        .parse()
-                                        .expect("Veuillez entrer un nombre !");
+        let supposition: u32 = match supposition.trim().parse() {
+            Ok(nombre) => nombre,
+            Err(_) => continue,
+        };
 
         println!("Votre nombre : {}", supposition);
 
